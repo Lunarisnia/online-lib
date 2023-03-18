@@ -4,11 +4,11 @@ import { IBorrowingScheduleTable } from "../../interfaces/borrowingScheduleTable
 class MockBorrowingScheduleDatabase {
   static mockBorrowingScheduleTable: IBorrowingScheduleTable[] = [];
 
-  findOne(query: (data: IBorrowingScheduleTable) => unknown) {
+  public static findOne(query: (data: IBorrowingScheduleTable) => unknown) {
     return MockBorrowingScheduleDatabase.mockBorrowingScheduleTable.find(query);
   }
 
-  listAll(
+  public static listAll(
     query: (predicate: IBorrowingScheduleTable, index: number) => unknown
   ) {
     return MockBorrowingScheduleDatabase.mockBorrowingScheduleTable.filter(
@@ -16,7 +16,7 @@ class MockBorrowingScheduleDatabase {
     );
   }
 
-  addOne(
+  public static addOne(
     newValue: Omit<IBorrowingScheduleTable, "id">
   ): IBorrowingScheduleTable {
     const newData = {
@@ -29,27 +29,26 @@ class MockBorrowingScheduleDatabase {
 }
 
 export class BorrowingScheduleMockDBAdapter extends DatabaseDriver<IBorrowingScheduleTable> {
-  borrowingScheduleModel: MockBorrowingScheduleDatabase;
+  private static borrowingScheduleModel = MockBorrowingScheduleDatabase;
   constructor() {
     super();
-    this.borrowingScheduleModel = new MockBorrowingScheduleDatabase();
   }
 
-  async findAll(
+  public static async findAll(
     where: (predicate: IBorrowingScheduleTable, index: number) => unknown
   ): Promise<IBorrowingScheduleTable[]> {
     const results = this.borrowingScheduleModel.listAll(where);
     return results;
   }
 
-  async addOne(
+  public static async addOne(
     newData: Omit<IBorrowingScheduleTable, "id">
   ): Promise<IBorrowingScheduleTable> {
     const newUser = this.borrowingScheduleModel.addOne(newData);
     return newUser;
   }
 
-  async findOne(
+  public static async findOne(
     where: (data: IBorrowingScheduleTable) => unknown
   ): Promise<IBorrowingScheduleTable | undefined> {
     return this.borrowingScheduleModel.findOne(where);

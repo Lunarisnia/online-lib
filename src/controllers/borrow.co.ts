@@ -11,7 +11,7 @@ export const fetchBorrowSchedules = async (
   res: Response
 ): Promise<Response> => {
   const borrowingSchedule: DatabaseDriver<IBorrowingScheduleTable> =
-    new BorrowingScheduleMockDBAdapter();
+    BorrowingScheduleMockDBAdapter;
   const query = (data: IBorrowingScheduleTable) => {
     return res.locals.user.is_admin || data.user_id == res.locals.user.user_id;
   };

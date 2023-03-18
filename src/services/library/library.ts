@@ -67,7 +67,7 @@ interface IBookDetailResponse {
 }
 
 export class Library {
-  private static borrowingSchedule = new BorrowingScheduleMockDBAdapter();
+  private static borrowingSchedule = BorrowingScheduleMockDBAdapter;
   private static maxUniquePlanPerDay = 2;
 
   /**
