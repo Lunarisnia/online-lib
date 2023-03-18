@@ -99,19 +99,22 @@ export class Library {
     );
   }
 
+  public static checkDayNotPast(pickupIn: string) {
+    return dayjs(pickupIn).isAfter(dayjs().subtract(1, "day"), "day");
+  }
+
   /**
    * Make appointment to borrow book
    */
   public static async makeAppointment(
     detail: Omit<IBorrowingScheduleTable, "id">
   ) {
-    const isTheDayAvailable = await this.checkIfTheDayIsAvailable(
-      detail.user_id,
-      detail.pickup_in
-    );
+    const isTheDayAvailable =
+      this.checkDayNotPast(detail.pickup_in) &&
+      (await this.checkIfTheDayIsAvailable(detail.user_id, detail.pickup_in));
     if (!isTheDayAvailable)
       throw new DayUnavailableError(
-        "Too many people have booked the day, please choose another day."
+        "Day unavailable (too many person booked or invalid), please choose another day."
       );
     const appointment = await this.borrowingSchedule.addOne({
       ...detail,
