@@ -3,4 +3,5 @@ export interface IUserTable {
   username: string;
   password: string;
   name: string;
+  is_admin: boolean;
 }

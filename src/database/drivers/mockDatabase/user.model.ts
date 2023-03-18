@@ -7,18 +7,28 @@ class MockUserDatabase {
       id: "0",
       username: "rio",
       password: "123",
+      is_admin: false,
       name: "Rio",
     },
     {
       id: "1",
       username: "tania",
       password: "123",
+      is_admin: false,
       name: "Tania",
     },
     {
       id: "2",
       username: "connor",
       password: "123",
+      is_admin: false,
+      name: "Connor",
+    },
+    {
+      id: "3",
+      username: "joey",
+      password: "123",
+      is_admin: true,
       name: "Connor",
     },
   ];

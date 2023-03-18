@@ -29,6 +29,7 @@ export class Authenticator {
     return jwt.sign(
       {
         user_id: user.id,
+        is_admin: user.is_admin,
       },
       serverConfig.jwtSecret,
       {

@@ -3,10 +3,13 @@ import axios from "axios";
 import { IBorrowingScheduleTable } from "../../database/interfaces/borrowingScheduleTable";
 import { BorrowingScheduleMockDBAdapter } from "../../database/drivers/mockDatabase/borrowingSchedule.model";
 import dayjs from "dayjs";
-import { DayUnavailableError } from "../error/types";
+import {
+  BookUnavailableError,
+  DayUnavailableError,
+  ResourceNotFoundError,
+} from "../error/types";
 export interface IAuthor {
   key: string;
-  name: string;
 }
 
 interface IAvailability {
@@ -58,6 +61,11 @@ interface ISubjectResponse {
   works: IWork[];
 }
 
+interface IBookDetailResponse {
+  title: string;
+  authors: IAuthor[];
+}
+
 export class Library {
   private static borrowingSchedule = new BorrowingScheduleMockDBAdapter();
   private static maxUniquePlanPerDay = 2;
@@ -72,6 +80,19 @@ export class Library {
       `${serverConfig.libraryHost}/subjects/${subject}.json`
     );
     return <ISubjectResponse>response.data;
+  }
+
+  public static async fetchBookByCoverEdition(coverEdition: string) {
+    try {
+      const response = await axios.get(
+        `${serverConfig.libraryHost}/book/${coverEdition}.json`
+      );
+      return <IBookDetailResponse>response.data;
+    } catch (error: any) {
+      if (error.response.data.error == "notfound")
+        throw new ResourceNotFoundError("Book not found");
+      else throw error;
+    }
   }
 
   /**
@@ -99,23 +120,42 @@ export class Library {
     );
   }
 
+  private static checkDayNotPast(pickupIn: string) {
+    return dayjs(pickupIn).isAfter(dayjs().subtract(1, "day"), "day");
+  }
+
   /**
    * Make appointment to borrow book
    */
   public static async makeAppointment(
-    detail: Omit<IBorrowingScheduleTable, "id">
+    pickupIn: string,
+    coverEdition: string,
+    userId: string
   ) {
-    const isTheDayAvailable = await this.checkIfTheDayIsAvailable(
-      detail.user_id,
-      detail.pickup_in
-    );
+    const isTheDayAvailable =
+      this.checkDayNotPast(pickupIn) &&
+      (await this.checkIfTheDayIsAvailable(userId, pickupIn));
     if (!isTheDayAvailable)
       throw new DayUnavailableError(
-        "Too many people have booked the day, please choose another day."
+        "Day unavailable (too many person booked or invalid), please choose another day."
       );
+
+    const hasBorrowed = await this.borrowingSchedule.findOne(
+      (data: IBorrowingScheduleTable) => data.cover_edition_key == coverEdition
+    );
+    if (hasBorrowed)
+      throw new BookUnavailableError(
+        "Book is currently unavailable for borrowing."
+      );
+
+    const book = await this.fetchBookByCoverEdition(coverEdition);
+
     const appointment = await this.borrowingSchedule.addOne({
-      ...detail,
-      pickup_in: dayjs(detail.pickup_in).format(serverConfig.dateFormat),
+      authors: book.authors,
+      cover_edition_key: coverEdition,
+      title: book.title,
+      user_id: userId,
+      pickup_in: dayjs(pickupIn).format(serverConfig.dateFormat),
     });
     return appointment;
   }
