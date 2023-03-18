@@ -1,18 +1,6 @@
 import { serverConfig } from "../../config/components/server.config";
 import axios from "axios";
-
-/**
- * Needed (Borrower):
- * - Title
- * - Author
- * - Edition Number
- *
- * Needed (Librarian):
- * - All the previous
- * - Pick Up Schedule
- */
-
-interface IAuthor {
+export interface IAuthor {
   key: string;
   name: string;
 }
@@ -67,16 +55,12 @@ interface ISubjectResponse {
 }
 
 export class Library {
-  // This piece of code can see if the status is available for borrowing or not
-  // "borrowed": str(response['status'] not in ['open', 'borrow_available']).lower(),
-
   /**
    * Fetch book by genre/subject
-   * This is assuming you really like "Horror"
    */
-  async fetchBooksBySubject(): Promise<ISubjectResponse> {
+  async fetchBooksBySubject(subject: string): Promise<ISubjectResponse> {
     const response = await axios.get(
-      `${serverConfig.libraryHost}/subjects/horror.json`
+      `${serverConfig.libraryHost}/subjects/${subject}.json`
     );
     return <ISubjectResponse>response.data;
   }

@@ -6,9 +6,8 @@ export const getBooksBySubject = async (
   res: Response
 ): Promise<Response> => {
   const library = new Library();
-  const results = await library.fetchBooksBySubject();
+  const results = await library.fetchBooksBySubject("horror"); // Assuming you really like "Horror"
   return res.send({
-    subject_type: results.subject_type,
     total_work: results.work_count,
     works: results.works,
   });
