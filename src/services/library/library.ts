@@ -1,5 +1,8 @@
 import { serverConfig } from "../../config/components/server.config";
 import axios from "axios";
+import { DatabaseDriver } from "../../database/base";
+import { IBorrowingScheduleTable } from "../../database/interfaces/borrowingScheduleTable";
+import { BorrowingScheduleMockDBAdapter } from "../../database/drivers/mockDatabase/borrowingSchedule.model";
 export interface IAuthor {
   key: string;
   name: string;
@@ -55,6 +58,11 @@ interface ISubjectResponse {
 }
 
 export class Library {
+  borrowingSchedule: DatabaseDriver<IBorrowingScheduleTable>;
+  constructor() {
+    this.borrowingSchedule = new BorrowingScheduleMockDBAdapter();
+  }
+
   /**
    * Fetch book by genre/subject
    */
@@ -63,5 +71,16 @@ export class Library {
       `${serverConfig.libraryHost}/subjects/${subject}.json`
     );
     return <ISubjectResponse>response.data;
+  }
+
+  /**
+   * Make appointment to borrow book
+   */
+  async makeAppointment(detail: Omit<IBorrowingScheduleTable, "id">) {
+    const appointment = await this.borrowingSchedule.addOne({
+      ...detail,
+      user_id: "0",
+    });
+    return appointment;
   }
 }
