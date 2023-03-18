@@ -12,5 +12,5 @@ export const schemaValidation = (
   options: ValidationOptions | undefined
 ) => {
   const valid = schema.validate(body, options);
-  if (valid.error) throw valid.error.details[0];
+  if (valid.error) throw valid.error;
 };

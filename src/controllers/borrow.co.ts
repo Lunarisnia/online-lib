@@ -12,9 +12,8 @@ export const fetchBorrowSchedules = async (
 ): Promise<Response> => {
   const borrowingSchedule: DatabaseDriver<IBorrowingScheduleTable> =
     new BorrowingScheduleMockDBAdapter();
-
   const byId = (data: IBorrowingScheduleTable) => {
-    return data.user_id == "0";
+    return data.user_id == res.locals.user.user_id;
   };
   const results = await borrowingSchedule.findAll(byId);
   return res.send(results);
@@ -43,6 +42,9 @@ export const createBorrowSchedule = async (
   });
   const body = <Omit<IBorrowingScheduleTable, "id">>req.body;
 
-  const result = await Library.makeAppointment(body);
+  const result = await Library.makeAppointment({
+    ...body,
+    user_id: res.locals.user.user_id,
+  });
   return res.send(result);
 };

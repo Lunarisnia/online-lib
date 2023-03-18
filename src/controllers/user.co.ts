@@ -17,6 +17,10 @@ export const addUser = async (
   res: Response
 ): Promise<Response> => {
   const users: DatabaseDriver<IUserTable> = new UserMockDBAdapter();
-  const newUser = await users.addOne({ name: "string" });
+  const newUser = await users.addOne({
+    name: "string",
+    username: "newUserName",
+    password: "123",
+  });
   return res.send({ newUser: newUser });
 };

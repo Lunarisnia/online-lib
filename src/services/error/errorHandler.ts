@@ -33,7 +33,7 @@ export const errHandler = (
         .json(
           errorFormatter(
             errId || 1001,
-            "InternalError",
+            name || "InternalError",
             message || "Internal Server Error"
           )
         );

@@ -12,16 +12,17 @@ describe("Given a request to make an appointment", () => {
 
     Library.makeAppointment = jest.fn().mockReturnValue(mockReturn);
     request.body = {
-        title: "Test",
-        authors: [
-            {
-                key: "key",
-                name: "Author"
-            }
-        ],
-        cover_edition_key: "key",
-        pickup_in: "2021-12-01"
-    }
+      title: "Test",
+      authors: [
+        {
+          key: "key",
+          name: "Author",
+        },
+      ],
+      cover_edition_key: "key",
+      pickup_in: "2021-12-01",
+    };
+    response.locals = { user: { user_id: "0" } };
     response.send = jest.fn().mockReturnValue(mockReturn);
     const result = await createBorrowSchedule(request, response);
 

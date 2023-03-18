@@ -1,8 +1,9 @@
 import { serverConfig } from "../../config/components/server.config";
 import axios from "axios";
-import { DatabaseDriver } from "../../database/base";
 import { IBorrowingScheduleTable } from "../../database/interfaces/borrowingScheduleTable";
 import { BorrowingScheduleMockDBAdapter } from "../../database/drivers/mockDatabase/borrowingSchedule.model";
+import dayjs from "dayjs";
+import { DayUnavailableError } from "../error/types";
 export interface IAuthor {
   key: string;
   name: string;
@@ -59,6 +60,7 @@ interface ISubjectResponse {
 
 export class Library {
   private static borrowingSchedule = new BorrowingScheduleMockDBAdapter();
+  private static maxUniquePlanPerDay = 2;
 
   /**
    * Fetch book by genre/subject
@@ -73,14 +75,47 @@ export class Library {
   }
 
   /**
+   * Only allow user to make an appointment if the day has less than a determined unique
+   * person booking in.
+   */
+  private static async checkIfTheDayIsAvailable(
+    userId: string,
+    pickupIn: string
+  ): Promise<boolean> {
+    const isSameDate = (data: IBorrowingScheduleTable) =>
+      dayjs(data.pickup_in).isSame(pickupIn, "day");
+    const onlyUnique = (data: string, index: number, self: string[]) => {
+      return self.indexOf(data) === index;
+    };
+    const uniquePlanInTheDay = (
+      await this.borrowingSchedule.findAll(isSameDate)
+    )
+      .map((data) => data.user_id)
+      .filter(onlyUnique);
+
+    return !(
+      uniquePlanInTheDay.length >= this.maxUniquePlanPerDay &&
+      !uniquePlanInTheDay.includes(userId)
+    );
+  }
+
+  /**
    * Make appointment to borrow book
    */
   public static async makeAppointment(
     detail: Omit<IBorrowingScheduleTable, "id">
   ) {
+    const isTheDayAvailable = await this.checkIfTheDayIsAvailable(
+      detail.user_id,
+      detail.pickup_in
+    );
+    if (!isTheDayAvailable)
+      throw new DayUnavailableError(
+        "Too many people have booked the day, please choose another day."
+      );
     const appointment = await this.borrowingSchedule.addOne({
       ...detail,
-      user_id: "0",
+      pickup_in: dayjs(detail.pickup_in).format(serverConfig.dateFormat),
     });
     return appointment;
   }

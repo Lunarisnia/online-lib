@@ -36,6 +36,7 @@ export const serverConfig = {
     apiVersion: envVars.API_VERSION || "1.0.0",
   },
   jwtSecret: envVars.JWT_SECRET,
-  jwtExpDay: envVars.JWT_EXP_DAY,
+  jwtExpDay: envVars.JWT_EXP_DAY || "2h",
   libraryHost: envVars.LIBRARY_HOST,
+  dateFormat: "DD-MM-YYYY",
 };

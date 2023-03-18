@@ -4,8 +4,9 @@ import {
   createBorrowSchedule,
   fetchBorrowSchedules,
 } from "../controllers/borrow.co";
+import { auth } from "../controllers/auth.co";
 
 export default (router: Router) => {
-  router.get("/", wrap(fetchBorrowSchedules));
-  router.post("/", wrap(createBorrowSchedule));
+  router.get("/", wrap(auth), wrap(fetchBorrowSchedules));
+  router.post("/", wrap(auth), wrap(createBorrowSchedule));
 };
