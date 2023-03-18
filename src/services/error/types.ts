@@ -44,10 +44,10 @@ export class UnauthorizedAccessError extends CustomError {
     this._errId = 1003;
   }
 }
-export class DayIsFullError extends CustomError {
+export class DayUnavailableError extends CustomError {
   constructor(message: string) {
     super(message);
-    this.name = "DayIsFullError";
+    this.name = "DayUnavailableError";
     this._statusCode = 401;
     this._errId = 1004;
   }

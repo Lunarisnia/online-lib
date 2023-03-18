@@ -1,10 +1,9 @@
 import { serverConfig } from "../../config/components/server.config";
 import axios from "axios";
-import { DatabaseDriver } from "../../database/base";
 import { IBorrowingScheduleTable } from "../../database/interfaces/borrowingScheduleTable";
 import { BorrowingScheduleMockDBAdapter } from "../../database/drivers/mockDatabase/borrowingSchedule.model";
 import dayjs from "dayjs";
-import { DayIsFullError } from "../error/types";
+import { DayUnavailableError } from "../error/types";
 export interface IAuthor {
   key: string;
   name: string;
@@ -111,7 +110,7 @@ export class Library {
       detail.pickup_in
     );
     if (!isTheDayAvailable)
-      throw new DayIsFullError(
+      throw new DayUnavailableError(
         "Too many people have booked the day, please choose another day."
       );
     const appointment = await this.borrowingSchedule.addOne({
