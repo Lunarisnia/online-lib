@@ -4,10 +4,8 @@ import { IBorrowingScheduleTable } from "../../interfaces/borrowingScheduleTable
 class MockBorrowingScheduleDatabase {
   static mockBorrowingScheduleTable: IBorrowingScheduleTable[] = [];
 
-  findOneById(id: string) {
-    return MockBorrowingScheduleDatabase.mockBorrowingScheduleTable.find(
-      (data) => data.id == id
-    );
+  findOne(query: (data: IBorrowingScheduleTable) => unknown) {
+    return MockBorrowingScheduleDatabase.mockBorrowingScheduleTable.find(query);
   }
 
   listAll(
@@ -49,5 +47,11 @@ export class BorrowingScheduleMockDBAdapter extends DatabaseDriver<IBorrowingSch
   ): Promise<IBorrowingScheduleTable> {
     const newUser = this.borrowingScheduleModel.addOne(newData);
     return newUser;
+  }
+
+  async findOne(
+    where: (data: IBorrowingScheduleTable) => unknown
+  ): Promise<IBorrowingScheduleTable | undefined> {
+    return this.borrowingScheduleModel.findOne(where);
   }
 }

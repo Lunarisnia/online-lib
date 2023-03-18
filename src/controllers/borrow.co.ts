@@ -20,15 +20,6 @@ export const fetchBorrowSchedules = async (
 };
 
 const createBorrowScheduleSchema = Joi.object({
-  title: Joi.string().required(),
-  authors: Joi.array()
-    .items(
-      Joi.object({
-        key: Joi.string().required(),
-        name: Joi.string().required(),
-      })
-    )
-    .required(),
   cover_edition_key: Joi.string().required(),
   pickup_in: Joi.date().required(),
 }).required();
@@ -40,11 +31,11 @@ export const createBorrowSchedule = async (
   schemaValidation(createBorrowScheduleSchema, req.body, {
     allowUnknown: false,
   });
-  const body = <Omit<IBorrowingScheduleTable, "id">>req.body;
 
-  const result = await Library.makeAppointment({
-    ...body,
-    user_id: res.locals.user.user_id,
-  });
+  const result = await Library.makeAppointment(
+    req.body.pickup_in,
+    req.body.cover_edition_key,
+    res.locals.user.user_id
+  );
   return res.send(result);
 };

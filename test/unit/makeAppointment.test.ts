@@ -12,13 +12,6 @@ describe("Given a request to make an appointment", () => {
 
     Library.makeAppointment = jest.fn().mockReturnValue(mockReturn);
     request.body = {
-      title: "Test",
-      authors: [
-        {
-          key: "key",
-          name: "Author",
-        },
-      ],
       cover_edition_key: "key",
       pickup_in: "2021-12-01",
     };

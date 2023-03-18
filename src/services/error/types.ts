@@ -52,3 +52,12 @@ export class DayUnavailableError extends CustomError {
     this._errId = 1004;
   }
 }
+
+export class BookUnavailableError extends CustomError {
+  constructor(message: string) {
+    super(message);
+    this.name = "BookUnavailableError";
+    this._statusCode = 404;
+    this._errId = 1005;
+  }
+}
