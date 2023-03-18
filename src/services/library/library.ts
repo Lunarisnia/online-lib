@@ -58,15 +58,14 @@ interface ISubjectResponse {
 }
 
 export class Library {
-  borrowingSchedule: DatabaseDriver<IBorrowingScheduleTable>;
-  constructor() {
-    this.borrowingSchedule = new BorrowingScheduleMockDBAdapter();
-  }
+  private static borrowingSchedule = new BorrowingScheduleMockDBAdapter();
 
   /**
    * Fetch book by genre/subject
    */
-  async fetchBooksBySubject(subject: string): Promise<ISubjectResponse> {
+  public static async fetchBooksBySubject(
+    subject: string
+  ): Promise<ISubjectResponse> {
     const response = await axios.get(
       `${serverConfig.libraryHost}/subjects/${subject}.json`
     );
@@ -76,7 +75,9 @@ export class Library {
   /**
    * Make appointment to borrow book
    */
-  async makeAppointment(detail: Omit<IBorrowingScheduleTable, "id">) {
+  public static async makeAppointment(
+    detail: Omit<IBorrowingScheduleTable, "id">
+  ) {
     const appointment = await this.borrowingSchedule.addOne({
       ...detail,
       user_id: "0",

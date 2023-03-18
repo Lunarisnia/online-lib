@@ -41,9 +41,8 @@ export const createBorrowSchedule = async (
   schemaValidation(createBorrowScheduleSchema, req.body, {
     allowUnknown: false,
   });
-  const library = new Library();
   const body = <Omit<IBorrowingScheduleTable, "id">>req.body;
 
-  const result = await library.makeAppointment(body);
+  const result = await Library.makeAppointment(body);
   return res.send(result);
 };
