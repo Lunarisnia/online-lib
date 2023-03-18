@@ -89,7 +89,7 @@ export class Library {
       );
       return <IBookDetailResponse>response.data;
     } catch (error: any) {
-      if (error.response.data.error == "notfound")
+      if (error.response?.data?.error == "notfound")
         throw new ResourceNotFoundError("Book not found");
       else throw error;
     }
