@@ -5,5 +5,5 @@ export interface IBorrowingScheduleTable {
   title: string;
   cover_edition_key: string;
   authors: IAuthor[];
-  pickup_in: Date;
+  pickup_in: string;
 }

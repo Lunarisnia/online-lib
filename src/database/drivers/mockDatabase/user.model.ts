@@ -5,12 +5,26 @@ class MockUserDatabase {
   static mockUserTable: IUserTable[] = [
     {
       id: "0",
+      username: "rio",
+      password: "123",
       name: "Rio",
+    },
+    {
+      id: "1",
+      username: "tania",
+      password: "123",
+      name: "Tania",
+    },
+    {
+      id: "2",
+      username: "connor",
+      password: "123",
+      name: "Connor",
     },
   ];
 
-  findOneById(id: string) {
-    return MockUserDatabase.mockUserTable.find((data) => data.id == id);
+  findOne(query: (data: IUserTable) => unknown) {
+    return MockUserDatabase.mockUserTable.find(query);
   }
 
   listAll() {
@@ -28,10 +42,17 @@ class MockUserDatabase {
 }
 
 export class UserMockDBAdapter extends DatabaseDriver<IUserTable> {
-  userModel: MockUserDatabase;
+  private userModel: MockUserDatabase;
   constructor() {
     super();
     this.userModel = new MockUserDatabase();
+  }
+
+  async findOne(
+    where: (data: IUserTable) => unknown
+  ): Promise<IUserTable | undefined> {
+    const result = this.userModel.findOne(where);
+    return result;
   }
 
   async findAll(_where: {}): Promise<IUserTable[]> {
