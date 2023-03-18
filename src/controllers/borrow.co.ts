@@ -12,10 +12,10 @@ export const fetchBorrowSchedules = async (
 ): Promise<Response> => {
   const borrowingSchedule: DatabaseDriver<IBorrowingScheduleTable> =
     new BorrowingScheduleMockDBAdapter();
-  const byId = (data: IBorrowingScheduleTable) => {
-    return data.user_id == res.locals.user.user_id;
+  const query = (data: IBorrowingScheduleTable) => {
+    return res.locals.user.is_admin || data.user_id == res.locals.user.user_id;
   };
-  const results = await borrowingSchedule.findAll(byId);
+  const results = await borrowingSchedule.findAll(query);
   return res.send(results);
 };
 

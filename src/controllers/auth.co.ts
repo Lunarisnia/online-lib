@@ -4,6 +4,7 @@ import { schemaValidation } from "../services/request/schemaValidation";
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import { serverConfig } from "../config/components/server.config";
+import { UnauthorizedAccessError } from "../services/error/types";
 
 const loginSchema = Joi.object({
   username: Joi.string().required(),
@@ -26,4 +27,17 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
   const token = authHeader && authHeader.split(" ")[1];
   res.locals.user = jwt.verify(token || "", serverConfig.jwtSecret);
   next();
+};
+
+export const adminAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+  res.locals.user = jwt.verify(token || "", serverConfig.jwtSecret);
+  if (!res.locals.user.is_admin)
+    throw new UnauthorizedAccessError("Unauthorized Access");
+  else next();
 };

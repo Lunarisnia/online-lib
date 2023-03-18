@@ -21,6 +21,7 @@ export const addUser = async (
     name: "string",
     username: "newUserName",
     password: "123",
+    is_admin: false,
   });
   return res.send({ newUser: newUser });
 };
