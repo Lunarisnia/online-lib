@@ -13,7 +13,7 @@ const envSchema = Joi.object({
   API_VERSION: Joi.string().allow("").required(),
   JWT_SECRET: Joi.string().required(),
   JWT_EXP_DAY: Joi.number().optional(),
-  EMIT_GQL_SCHEMA: Joi.boolean().optional(),
+  LIBRARY_HOST: Joi.string().required(),
 });
 
 /**
@@ -37,5 +37,5 @@ export const serverConfig = {
   },
   jwtSecret: envVars.JWT_SECRET,
   jwtExpDay: envVars.JWT_EXP_DAY,
-  emitGqlSchema: envVars.EMIT_GQL_SCHEMA,
+  libraryHost: envVars.LIBRARY_HOST,
 };

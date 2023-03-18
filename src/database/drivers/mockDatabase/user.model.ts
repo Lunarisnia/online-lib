@@ -1,8 +1,8 @@
 import { DatabaseDriver } from "../../base";
-import { UserTable } from "../../interfaces/userTable";
+import { IUserTable } from "../../interfaces/userTable";
 
 class MockUserDatabase {
-  static mockUserTable: UserTable[] = [
+  static mockUserTable: IUserTable[] = [
     {
       id: "0",
       name: "Rio",
@@ -17,7 +17,7 @@ class MockUserDatabase {
     return MockUserDatabase.mockUserTable;
   }
 
-  addOne(newValue: Omit<UserTable, "id">): UserTable {
+  addOne(newValue: Omit<IUserTable, "id">): IUserTable {
     const newData = {
       id: MockUserDatabase.mockUserTable.length.toString(),
       ...newValue,
@@ -27,19 +27,19 @@ class MockUserDatabase {
   }
 }
 
-export class UserMockDBAdapter extends DatabaseDriver<UserTable> {
+export class UserMockDBAdapter extends DatabaseDriver<IUserTable> {
   userModel: MockUserDatabase;
   constructor() {
     super();
     this.userModel = new MockUserDatabase();
   }
 
-  async findAll(_where: {}): Promise<UserTable[]> {
+  async findAll(_where: {}): Promise<IUserTable[]> {
     const results = this.userModel.listAll();
     return results;
   }
 
-  async addOne(newData: Omit<UserTable, "id">): Promise<UserTable> {
+  async addOne(newData: Omit<IUserTable, "id">): Promise<IUserTable> {
     const newUser = this.userModel.addOne(newData);
     return newUser;
   }
