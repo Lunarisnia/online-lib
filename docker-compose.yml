@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  api:
+    command: sh -c "npm start"
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    working_dir: /app
+    networks:
+      - onlinelib
+    env_file:
+      - ./.env
+
+networks:
+  onlinelib: {}
