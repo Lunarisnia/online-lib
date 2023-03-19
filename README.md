@@ -1,6 +1,20 @@
 # Online Horror Library
 Your local library for "Horror" genre enthusiast is now available online.
 
+## Table of contents
+* [Overview](https://github.com/Lunarisnia/online-lib#overview)
+* [Running the program](https://github.com/Lunarisnia/online-lib#running-the-program)
+   * [Manual Installation](https://github.com/Lunarisnia/online-lib#manual-installation)
+   * [Using Docker Compose](https://github.com/Lunarisnia/online-lib#using-docker-compose)
+* [Environment Variable Details](https://github.com/Lunarisnia/online-lib#environment-variable-details)
+* [API Documentation](https://github.com/Lunarisnia/online-lib#api-documenations)
+   * [Introduction](https://github.com/Lunarisnia/online-lib#introduction)
+   * [Authorization](https://github.com/Lunarisnia/online-lib#authorization)
+   * [Error Response](https://github.com/Lunarisnia/online-lib#error-response)
+   * [Endpoints](https://github.com/Lunarisnia/online-lib#endpoints)
+* [Pre-Existing User List](https://github.com/Lunarisnia/online-lib#pre-existing-user-list)
+* [Open Library API](https://openlibrary.org/developers/api)
+
 ## Overview
 Online Horror Library is a repository for the backend of a local library. It provide access to many books in the "Horror" genre. Which you can book an appointment online to borrow and we're open 24 hours.
 
@@ -112,8 +126,54 @@ Many API endpoint return the JSON representation of the resources created or edi
 
    - Response
       ```
-      WIP
+      {
+          "total_work": number,
+          "works": [
+              {
+                  "key": string,
+                  "title": string,
+                  "edition_count": number,
+                  "cover_id": number,
+                  "cover_edition_key": string,
+                  "subject": [string],
+                  "ia_collection": [string],
+                  "lendinglibrary": boolean,
+                  "printdisabled": boolean,
+                  "lending_edition": string,
+                  "lending_identifier": string,
+                  "authors": [
+                      {
+                          "key": string,
+                          "name": string
+                      }
+                  ],
+                  "first_publish_year": number,
+                  "ia": string,
+                  "public_scan": boolean,
+                  "has_fulltext": boolean,
+              }
+          ]
+      }
       ```
+
+      `total_work` number representing the total books available
+   
+      `works` array containing the response body obtained from the OpenLibrary API
+      - `key` string representing the unique identifier of the whole work
+      - `title` string representing the title of the work
+      - `cover_id` number representing the cover id
+      - `cover_edition_key` string representing the unique edition key (this is what is used to submit appointment)
+      - `subject` array of strings representing the list of genre/subject for the work
+      - `ia_collection` array of strings representing the list of ia collection
+      - `lendinglibrary` boolean
+      - `printdisabled` boolean
+      - `lending_edition` string
+      - `lending_identifier` string
+      - `authors` array of object representing the list of authors
+      - `first_publish_year` number representing the work first published year
+      - `ia` string
+      - `public_scan` boolean
+      - `has_fulltext` boolean 
 
 - Show Your Borrow Appointment List\
    Endpoint used to obtain the list of appointment the logged in user made.
