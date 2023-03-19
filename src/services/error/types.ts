@@ -1,5 +1,3 @@
-"use strict";
-
 class CustomError extends Error {
   protected _statusCode: number;
   protected _errId: number;
@@ -9,7 +7,7 @@ class CustomError extends Error {
   }
 
   get errId(): number {
-    return this._statusCode;
+    return this._errId;
   }
 
   constructor(message: string) {
