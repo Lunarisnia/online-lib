@@ -30,9 +30,6 @@ class MockBorrowingScheduleDatabase {
 
 export class BorrowingScheduleMockDBAdapter extends DatabaseDriver<IBorrowingScheduleTable> {
   private static borrowingScheduleModel = MockBorrowingScheduleDatabase;
-  constructor() {
-    super();
-  }
 
   public static async findAll(
     where: (predicate: IBorrowingScheduleTable, index: number) => unknown
