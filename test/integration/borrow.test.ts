@@ -32,8 +32,37 @@ describe("GET /v1/borrow", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(db.findAll).toBeCalledTimes(1);
-    expect(response.body).toHaveLength(1);
-    expect(response.body[0].title).toEqual("MockBook");
+    expect(response.body.page_size).toEqual(10);
+    expect(response.body.page_number).toEqual(1);
+    expect(response.body.appointments).toHaveLength(1);
+    expect(response.body.appointments[0].title).toEqual("MockBook");
+  });
+
+  it("Responds with only the second entry of the result", async () => {
+    const mockResult = [
+      {
+        title: "MockBook",
+      },
+      {
+        title: "MockBook2",
+      },
+    ];
+    const db = BorrowingScheduleMockDBAdapter;
+
+    db.findAll = jest.fn().mockImplementation((cb) => {
+      cb({});
+      return mockResult;
+    });
+
+    const response = await request(server())
+      .get("/v1/borrow?page_number=2&page_size=1")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(db.findAll).toBeCalledTimes(1);
+    expect(response.body.page_size).toEqual(1);
+    expect(response.body.page_number).toEqual(2);
+    expect(response.body.appointments).toHaveLength(1);
+    expect(response.body.appointments[0].title).toEqual("MockBook2");
   });
 });
 

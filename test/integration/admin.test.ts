@@ -36,8 +36,10 @@ describe("GET /v1/admin/borrow/list", () => {
       .set("Authorization", `Bearer ${adminToken}`);
 
     expect(db.findAll).toBeCalledTimes(1);
-    expect(response.body).toHaveLength(1);
-    expect(response.body[0].title).toEqual("MockBook");
+    expect(response.body.page_size).toEqual(10);
+    expect(response.body.page_number).toEqual(1);
+    expect(response.body.appointments).toHaveLength(1);
+    expect(response.body.appointments[0].title).toEqual("MockBook");
   });
 
   it("Responds with an error because the request is not from an admin", async () => {
