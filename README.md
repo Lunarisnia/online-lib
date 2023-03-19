@@ -7,7 +7,7 @@ Your local library for "Horror" genre enthusiast is now available online.
    * [Manual Installation](https://github.com/Lunarisnia/online-lib#manual-installation)
    * [Using Docker Compose](https://github.com/Lunarisnia/online-lib#using-docker-compose)
 * [Environment Variable Details](https://github.com/Lunarisnia/online-lib#environment-variable-details)
-* [API Documentation](https://github.com/Lunarisnia/online-lib#api-documenations)
+* [API Documentation](https://github.com/Lunarisnia/online-lib#api-documentations)
    * [Introduction](https://github.com/Lunarisnia/online-lib#introduction)
    * [Authorization](https://github.com/Lunarisnia/online-lib#authorization)
    * [Error Response](https://github.com/Lunarisnia/online-lib#error-response)
