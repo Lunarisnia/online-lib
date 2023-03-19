@@ -3,5 +3,5 @@ import { Router } from "express";
 import { getBooksBySubject } from "../controllers/book.co";
 
 export default (router: Router) => {
-  router.get("/subjects", wrap(getBooksBySubject));
+  router.get("/subject", wrap(getBooksBySubject));
 };
