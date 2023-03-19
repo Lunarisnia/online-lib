@@ -1,4 +1,5 @@
 "use strict";
+import { serverConfig } from "../../config/components/server.config";
 import { Request, Response, NextFunction } from "express";
 
 /**
@@ -12,28 +13,24 @@ export const errHandler = (
 ) => {
   const { name, message, statusCode, errId } = err;
 
-  console.log(err);
+  if (!serverConfig.isTest) console.error(err);
 
   switch (name) {
     case "TokenExpiredError":
-      return res.status(401).json(errorFormatter(1007, name, message));
+      return res.status(401).json(errorFormatter(1006, name, message));
     case "ValidationError":
       return res
         .status(400)
-        .json(errorFormatter(1008, name, err.details[0].message));
+        .json(errorFormatter(1007, name, err.details[0].message));
     case "JsonWebTokenError":
-      return res.status(401).json(errorFormatter(1009, name, message));
-    case "MulterError":
-      return res
-        .status(400)
-        .json(errorFormatter(1010, name, "File is too big."));
+      return res.status(401).json(errorFormatter(1008, name, message));
     default:
       return res
         .status(statusCode || 500)
         .json(
           errorFormatter(
             errId || 1001,
-            "InternalError",
+            name || "InternalError",
             message || "Internal Server Error"
           )
         );
