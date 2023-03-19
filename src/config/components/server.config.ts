@@ -10,9 +10,9 @@ dotenv.config();
 const envSchema = Joi.object({
   NODE_ENV: Joi.string().valid("development", "production", "test").required(),
   PORT: Joi.number().allow("").required(),
-  API_VERSION: Joi.string().allow("").required(),
+  API_VERSION: Joi.string().allow("").optional(),
   JWT_SECRET: Joi.string().required(),
-  JWT_EXP_DAY: Joi.number().optional(),
+  JWT_EXP: Joi.number().optional(),
   LIBRARY_HOST: Joi.string().required(),
 });
 
@@ -36,6 +36,6 @@ export const serverConfig = {
     apiVersion: envVars.API_VERSION || "1.0.0",
   },
   jwtSecret: envVars.JWT_SECRET,
-  jwtExpDay: envVars.JWT_EXP_DAY || "2h",
+  jwtExp: envVars.JWT_EXP || "2h",
   libraryHost: envVars.LIBRARY_HOST,
 };

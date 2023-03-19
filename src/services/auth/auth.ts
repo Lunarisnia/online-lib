@@ -33,7 +33,7 @@ export class Authenticator {
       },
       serverConfig.jwtSecret,
       {
-        expiresIn: serverConfig.jwtExpDay,
+        expiresIn: serverConfig.jwtExp,
       }
     );
   }
