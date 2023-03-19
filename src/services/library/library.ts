@@ -74,10 +74,16 @@ export class Library {
    * Fetch book by genre/subject
    */
   public static async fetchBooksBySubject(
-    subject: string
+    subject: string,
+    pageNumber: number,
+    pageSize: number
   ): Promise<ISubjectResponse> {
     const response = await axios.get(
-      `${serverConfig.libraryHost}/subjects/${subject}.json`
+      `${
+        serverConfig.libraryHost
+      }/subjects/${subject}.json?limit=${pageSize}&offset=${
+        pageNumber * pageSize
+      }`
     );
     return <ISubjectResponse>response.data;
   }
