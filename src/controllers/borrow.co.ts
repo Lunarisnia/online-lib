@@ -30,7 +30,7 @@ export const fetchBorrowSchedules = async (
 
 const createBorrowScheduleSchema = Joi.object({
   cover_edition_key: Joi.string().required(),
-  pickup_in: Joi.date().required(),
+  pickup_in: Joi.date().min("now").iso().required(),
 }).required();
 
 export const createBorrowSchedule = async (

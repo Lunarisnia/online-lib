@@ -38,5 +38,4 @@ export const serverConfig = {
   jwtSecret: envVars.JWT_SECRET,
   jwtExpDay: envVars.JWT_EXP_DAY || "2h",
   libraryHost: envVars.LIBRARY_HOST,
-  dateFormat: "DD-MM-YYYY",
 };
