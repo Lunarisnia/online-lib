@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { serverConfig } from "../../config/components/server.config";
 
 export class Authenticator {
-  private static userModel = new UserMockDBAdapter();
+  private static userModel = UserMockDBAdapter;
 
   private static validatePassword(
     password: string,

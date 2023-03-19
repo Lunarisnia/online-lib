@@ -33,15 +33,15 @@ class MockUserDatabase {
     },
   ];
 
-  findOne(query: (data: IUserTable) => unknown) {
+  public static findOne(query: (data: IUserTable) => unknown) {
     return MockUserDatabase.mockUserTable.find(query);
   }
 
-  listAll() {
+  public static listAll() {
     return MockUserDatabase.mockUserTable;
   }
 
-  addOne(newValue: Omit<IUserTable, "id">): IUserTable {
+  public static addOne(newValue: Omit<IUserTable, "id">): IUserTable {
     const newData = {
       id: MockUserDatabase.mockUserTable.length.toString(),
       ...newValue,
@@ -52,25 +52,26 @@ class MockUserDatabase {
 }
 
 export class UserMockDBAdapter extends DatabaseDriver<IUserTable> {
-  private userModel: MockUserDatabase;
+  private static userModel = MockUserDatabase;
   constructor() {
     super();
-    this.userModel = new MockUserDatabase();
   }
 
-  async findOne(
+  public static async findOne(
     where: (data: IUserTable) => unknown
   ): Promise<IUserTable | undefined> {
     const result = this.userModel.findOne(where);
     return result;
   }
 
-  async findAll(_where: {}): Promise<IUserTable[]> {
+  public static async findAll(_where: {}): Promise<IUserTable[]> {
     const results = this.userModel.listAll();
     return results;
   }
 
-  async addOne(newData: Omit<IUserTable, "id">): Promise<IUserTable> {
+  public static async addOne(
+    newData: Omit<IUserTable, "id">
+  ): Promise<IUserTable> {
     const newUser = this.userModel.addOne(newData);
     return newUser;
   }
