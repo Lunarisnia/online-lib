@@ -6,7 +6,6 @@ import { BorrowingScheduleMockDBAdapter } from "../../src/database/drivers/mockD
 import { Library } from "../../src/services/library/library";
 beforeEach(() => {
   jest.resetAllMocks();
-  process.env.JWT_SECRET = "SECRET";
 });
 
 const token = jwt.sign(

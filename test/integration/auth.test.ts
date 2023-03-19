@@ -1,6 +1,5 @@
 import request from "supertest";
 import { server } from "../../src/server";
-import { BorrowingScheduleMockDBAdapter } from "../../src/database/drivers/mockDatabase/borrowingSchedule.model";
 beforeEach(() => {
   jest.resetAllMocks();
 });

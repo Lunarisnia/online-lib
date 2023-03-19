@@ -5,7 +5,6 @@ import { serverConfig } from "../../src/config/components/server.config";
 import { BorrowingScheduleMockDBAdapter } from "../../src/database/drivers/mockDatabase/borrowingSchedule.model";
 beforeEach(() => {
   jest.resetAllMocks();
-  process.env.JWT_SECRET = "SECRET";
 });
 
 const adminToken = jwt.sign(
