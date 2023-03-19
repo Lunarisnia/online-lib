@@ -16,7 +16,7 @@ describe("GET /v1/book/subject", () => {
       ],
     };
     axios.get = jest.fn().mockResolvedValue({ data: mockBooks });
-    const response = await request(server()).get("/v1/book/subject");
+    const response = await request(server()).get("/v1/book/");
 
     expect(axios.get).toBeCalledTimes(1);
     expect(response.body.total_work).toEqual(1);

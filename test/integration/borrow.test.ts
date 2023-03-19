@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { serverConfig } from "../../src/config/components/server.config";
 import { BorrowingScheduleMockDBAdapter } from "../../src/database/drivers/mockDatabase/borrowingSchedule.model";
 import { Library } from "../../src/services/library/library";
+import dayjs from "dayjs";
 beforeEach(() => {
   jest.resetAllMocks();
 });
@@ -77,7 +78,7 @@ describe("POST /v1/borrow", () => {
       .set("Authorization", `Bearer ${token}`)
       .send({
         cover_edition_key: "COVEREDITION",
-        pickup_in: "03-18-2023",
+        pickup_in: dayjs().add(1, "hour").toISOString(),
       });
 
     expect(Library.makeAppointment).toBeCalledTimes(1);

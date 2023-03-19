@@ -35,13 +35,13 @@ describe("Given a request to make an appointment", () => {
     expect(newAppointment).rejects.toThrow(DayUnavailableError);
   });
 
-  it("Rejects the request because there is already too many people booking the same day", async () => {
+  it("Rejects the request because there is already too many people booking the same day and time", async () => {
     const db = BorrowingScheduleMockDBAdapter;
 
-    const today = dayjs().format();
+    const today = dayjs().toISOString();
     const mockSchedules = [
-      { user_id: "1", pickup_in: dayjs().subtract(1, "day").format() },
-      { user_id: "1", pickup_in: today },
+      { user_id: "1", pickup_in: dayjs().subtract(1, "day").toISOString() },
+      { user_id: "1", pickup_in: dayjs().add(1, "hour").toISOString() },
       { user_id: "1", pickup_in: today },
       { user_id: "1", pickup_in: today },
       { user_id: "2", pickup_in: today },

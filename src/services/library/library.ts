@@ -68,7 +68,7 @@ interface IBookDetailResponse {
 
 export class Library {
   private static borrowingSchedule = BorrowingScheduleMockDBAdapter;
-  private static maxUniquePlanPerDay = 2;
+  private static maxUniquePlanPerDayAndTime = 2;
 
   /**
    * Fetch book by genre/subject
@@ -96,27 +96,31 @@ export class Library {
   }
 
   /**
-   * Only allow user to make an appointment if the day has less than a determined unique
-   * person booking in.
+   * Only allow user to make an appointment if the
+   * day & time has less than a determined unique
+   * person booking in. It only matches the day and the hour
+   * it doesn't care about the minute/hour because we can't be sure
+   * if the person will be late or earlier.
    */
-  private static async checkIfTheDayIsAvailable(
+  private static async isDayAndTimeAvailable(
     userId: string,
     pickupIn: string
   ): Promise<boolean> {
-    const isSameDate = (data: IBorrowingScheduleTable) =>
-      dayjs(data.pickup_in).isSame(pickupIn, "day");
+    const isSameDayAndTime = (data: IBorrowingScheduleTable) =>
+      dayjs(data.pickup_in).isSame(pickupIn, "day") &&
+      dayjs(data.pickup_in).isSame(pickupIn, "hour");
     const onlyUnique = (data: string, index: number, self: string[]) => {
       return self.indexOf(data) === index;
     };
-    const uniquePlanInTheDay = (
-      await this.borrowingSchedule.findAll(isSameDate)
+    const uniquePlanInTheDayAndTime = (
+      await this.borrowingSchedule.findAll(isSameDayAndTime)
     )
       .map((data) => data.user_id)
       .filter(onlyUnique);
 
     return !(
-      uniquePlanInTheDay.length >= this.maxUniquePlanPerDay &&
-      !uniquePlanInTheDay.includes(userId)
+      uniquePlanInTheDayAndTime.length >= this.maxUniquePlanPerDayAndTime &&
+      !uniquePlanInTheDayAndTime.includes(userId)
     );
   }
 
@@ -134,10 +138,10 @@ export class Library {
   ) {
     const isTheDayAvailable =
       this.checkDayNotPast(pickupIn) &&
-      (await this.checkIfTheDayIsAvailable(userId, pickupIn));
+      (await this.isDayAndTimeAvailable(userId, pickupIn));
     if (!isTheDayAvailable)
       throw new DayUnavailableError(
-        "Day unavailable (too many person booked or invalid), please choose another day."
+        "Day and time unavailable (too many person booked or invalid), please choose another day or time."
       );
 
     const hasBorrowed = await this.borrowingSchedule.findOne(
@@ -155,7 +159,7 @@ export class Library {
       cover_edition_key: coverEdition,
       title: book.title,
       user_id: userId,
-      pickup_in: dayjs(pickupIn).format(serverConfig.dateFormat),
+      pickup_in: dayjs(pickupIn).toISOString(),
     });
     return appointment;
   }
