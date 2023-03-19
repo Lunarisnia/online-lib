@@ -14,17 +14,17 @@ export const fetchBorrowSchedules = async (
   const borrowingSchedule: DatabaseDriver<IBorrowingScheduleTable> =
     BorrowingScheduleMockDBAdapter;
 
-  const offset = parseInt(req.query.page_size?.toString() || "10");
-  const page = parseInt(req.query.page_number?.toString() || "1");
+  const pageNumber = parseInt(`${req.query.page_number}`) || 1;
+  const pageSize = parseInt(`${req.query.page_size}`) || 10;
   const query = (data: IBorrowingScheduleTable) => {
     return res.locals.user.is_admin || data.user_id == res.locals.user.user_id;
   };
   const results = await borrowingSchedule.findAll(query);
   return res.send({
-    page_size: offset,
-    page_number: page,
+    page_size: pageSize,
+    page_number: pageNumber,
     total_appointment: results.length,
-    appointments: paginate(results, offset, page),
+    appointments: paginate(results, pageSize, pageNumber),
   });
 };
 
