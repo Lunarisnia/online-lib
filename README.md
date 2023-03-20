@@ -49,12 +49,12 @@ You can set up the repository manually or using `docker-compose`:
 ## Environment Variable Details
 | Variable      | Status        | Example                           | Default                           | Description  |
 |:-------------:|:-------------:|:---------------------------------:|:---------------------------------:|:------------:|
-| NODE_ENV      | REQUIRED      | development \| production \| test | development \| production \| test | The environment variable your app is running on, can be left empty since it will be replaced by the npm command anyway. |
-| PORT          | REQUIRED      | 4000                              | 3000                              | The Port your application is running on, default to 3000 if not filled |
+| NODE_ENV      | REQUIRED      | development \| production \| test |                                   | The environment variable your app is running on. |
+| PORT          | REQUIRED      | 4000                              |                                   | The Port your application is running on. |
 | API_VERSION   | OPTIONAL      | 1.2.0                             | 1.0.0                             | Your API Version doesn't affect anything logically. Can be left empty |
 | LIBRARY_HOST  | REQUIRED      | https://openlibrary.org           |                                   | OpenLibrary API Host URL. Usually https://openlibrary.org/ |
 | JWT_SECRET    | REQUIRED      | mypersonaljwtsecretkey            |                                   | Your private JSONWebToken secret key. [To Learn More About JSONWebToken](https://jwt.io/introduction) |
-| JWT_EXP       | REQUIRED      | 2h \| 1d \| 4y                    | 2h                                | Your JWT Token Expiry duration. Expressed in seconds or a string describing a time span [vercel/ms](https://github.com/vercel/ms) |
+| JWT_EXP       | OPTIONAL      | 2h \| 1d \| 4y                    | 2h                                | Your JWT Token Expiry duration. Expressed in seconds or a string describing a time span [vercel/ms](https://github.com/vercel/ms) |
 
 ## API Documentations
 ### Introduction
